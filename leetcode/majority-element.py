@@ -1,19 +1,29 @@
 class Solution {
 public:
     int majorityElement(vector<int>& nums) {
-        unordered_map<int, int> map = {};
+        const int majority = nums.size()/2;
+        unordered_map<int, int> count;
 
-        for (int i = 0; i < nums.size(); ++i) {
-            if (map.find(nums.at(i)) == map.end()) {
-                map[nums.at(i)] = 0;
+        int maxCount = 0;
+        int maxElement = 0;
+
+        for (int num : nums) {
+            if (count.find(num) == count.end()) {
+                count[num] = 1;
+            } else {
+                ++count[num];
             }
 
-            ++map[nums.at(i)];
-            if (map[nums.at(i)] > nums.size()/2) {
-                return nums.at(i);
+            if (count[num] > maxCount) {
+                maxCount = count[num];
+                maxElement = num;
+
+                if (maxCount > majority) {
+                    break;
+                }
             }
         }
 
-        return 0;
+        return maxElement;
     }
 };
