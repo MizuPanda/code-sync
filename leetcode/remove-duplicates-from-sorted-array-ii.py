@@ -1,25 +1,22 @@
 class Solution {
-    public int removeDuplicates(int[] nums) {
-        int k = 0;
+public:
+    int removeDuplicates(vector<int>& nums) {
+        int count = 1;
+        int index = 1;
 
-        int last = 0;
-        int previous = last;
-
-        for (int i = 0; i < nums.length; i++) {
-            if (i == 0) {
-                last = nums[i];
-                k++;
+        for (size_t i = 1; i < nums.size(); ++i) {
+            if (nums.at(i) == nums.at(i - 1)) {
+                ++count;
             } else {
-                if (i == 1 || last != nums[i] || previous != last) {
-                    nums[k] = nums[i];
-                    k++;
-                }
+                count = 1;
+            }
 
-                previous = last;
-                last = nums[i];
-            } 
-        } 
+            if (count <= 2) {
+                nums.at(index) = nums.at(i);
+                ++index;
+            }
+        }
 
-        return k;
+        return index;
     }
-}
+};
