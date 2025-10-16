@@ -4,26 +4,18 @@ public:
         const int majority = nums.size()/2;
         unordered_map<int, int> count;
 
-        int maxCount = 0;
-        int maxElement = 0;
-
         for (int num : nums) {
             if (count.find(num) == count.end()) {
-                count[num] = 1;
-            } else {
-                ++count[num];
+                count[num] = 0;
             }
+            
+            ++count[num];
 
-            if (count[num] > maxCount) {
-                maxCount = count[num];
-                maxElement = num;
-
-                if (maxCount > majority) {
-                    break;
-                }
+            if (count[num] > majority) {
+                return num;
             }
         }
 
-        return maxElement;
+        return 0;
     }
 };
