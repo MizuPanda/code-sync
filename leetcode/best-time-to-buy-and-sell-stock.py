@@ -1,17 +1,27 @@
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
-        int buyPrice = prices.at(0);
-        int maxProfit = 0;
+        int maxProf = 0;
+        int sell = prices.at(0);
+        int buy = prices.at(0);
 
-        for (int i = 1; i < prices.size(); ++i) {
-            if (buyPrice > prices.at(i)) {
-                buyPrice = prices.at(i);
+        for (size_t i = 1; i < prices.size(); ++i) {
+            const int stock = prices.at(i);
+
+            if (stock < buy) {
+                buy = stock;
+                sell = stock;
+            } else if (stock > sell) {
+                sell = stock;
+
+                const int profit = sell - buy;
+
+                if (profit > maxProf) {
+                    maxProf = profit;
+                }
             }
-
-            maxProfit = max(maxProfit, prices.at(i) - buyPrice);
         }
 
-        return maxProfit;
+        return maxProf;
     }
 };
