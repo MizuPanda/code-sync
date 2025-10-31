@@ -1,25 +1,19 @@
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
-        int buy = prices[0];
-        int sell;
-        int profit = 0;
-        int maxProfit = 0;
+        int max = 0;
+        int currentPrice = prices.at(0);
 
-        for (int i = 1; i < prices.size(); ++i) {
-            sell = prices[i];
+        for (size_t i = 1; i < prices.size(); ++i) {
+            int dayPrice = prices.at(i);
 
-            // Worth to sell
-            if (sell - buy > profit) {
-                profit = sell - buy;
-            } else {
-                maxProfit += profit;
-                profit = 0;
-                buy = sell;
+            if (dayPrice > currentPrice) {
+                max += dayPrice - currentPrice;
             }
-       } 
-       maxProfit += profit;
 
-       return maxProfit;
+            currentPrice = dayPrice;
+        }
+
+        return max;
     }
 };
