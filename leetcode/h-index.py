@@ -1,24 +1,26 @@
 class Solution {
 public:
     int hIndex(vector<int>& citations) {
-        sort(citations.begin(), citations.end(), comp);
+        sort(citations.begin(), citations.end(),greater<int>());
 
-        int nonZero = 0;
+        int count = 0;
 
-        for (int i = 0; i < citations.size() && citations[i] != 0; ++i) {
-            ++nonZero;
-            if (i + 1 == citations[i]) {
-                return citations[i];
-            } else if (i + 1 > citations[i]) {
-                return i;
+        for (size_t i = 0; i < citations.size(); ++i) {
+            const int citation = citations.at(i);
+            ++count;
+
+            if (citation == 0) {
+                --count;
+                break;
+            } else if (count > citation) {
+                --count;
+                return count;
+            }
+             else if (count == citation) {
+                return count;
             }
         }
 
-        
-        return citations.front() == 0? 0 : nonZero;
-    }
-
-    static bool comp(int a, int b) {
-        return a > b;
+        return count;
     }
 };
