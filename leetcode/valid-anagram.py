@@ -8,23 +8,17 @@ public:
         unordered_map<string, int> letterCount;
 
         for (int i = 0; i < s.length(); ++i) {
-            const string letter = s.substr(i, 1);
+            const string ls = s.substr(i, 1);
+            const string lt = t.substr(i, 1);
 
-            if (letterCount.find(letter) == letterCount.end()) {
-                letterCount[letter] = 0;
-            }
-
-            ++letterCount[letter];
+            ++letterCount[ls];
+            --letterCount[lt];
         }
 
-        for (int i = 0; i < t.length(); ++i) {
-            const string letter = t.substr(i, 1);
-
-            if (letterCount.find(letter) == letterCount.end() || letterCount[letter] == 0) {
+        for (auto count : letterCount) {
+            if (count.second != 0)  {
                 return false;
             }
-
-            --letterCount[letter];
         }
 
         return true;
