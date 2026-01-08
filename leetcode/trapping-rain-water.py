@@ -1,27 +1,35 @@
 class Solution {
 public:
     int trap(vector<int>& height) {
-        int numRain = 0;
+        int water = 0;
 
-        for (int i = 0; i < height.size() - 1; ++i) {
-            if (height.at(i) == 0 || height.at(i + 1) >= height.at(i)) continue;
+        int leftBar = 0;
+        int rightBar = height.size() - 1;
 
-            int bottom = height.at(i + 1);
+        int leftMax = height.at(leftBar);
+        int rightMax = height.at(rightBar);
 
-            for (int j = i + 2; j < height.size(); ++j) {
+        while (leftBar < rightBar) {
 
-                if (height.at(j) > bottom) {
-                    numRain += (j - i - 1)*(min(height.at(i), height.at(j)) - bottom);
-                    if (height.at(j) > height.at(i)) {
-                        break;
-                    } else {
-                        bottom = height.at(j);
-                    }
+            if (leftMax <= rightMax) {
+                ++leftBar;
+
+                if (height.at(leftBar) > leftMax) {
+                    leftMax = height.at(leftBar);
+                } else if (height.at(leftBar) < leftMax) {
+                    water += leftMax - height.at(leftBar);
+                }
+            } else {
+                --rightBar;
+
+                if (height.at(rightBar) > rightMax) {
+                    rightMax = height.at(rightBar);
+                } else if (height.at(rightBar) < rightMax) {
+                    water += rightMax - height.at(rightBar);
                 }
             }
-
         }
 
-        return numRain;
+        return water;
     }
 };
