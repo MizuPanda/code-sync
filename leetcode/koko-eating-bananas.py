@@ -8,15 +8,12 @@ public:
         
         while (end > start) {
 
-            int k = start + (end - start)/2;
+            const int k = (start + end)/2;
 
             int time = 0;
 
-            for (int i = 0; i < piles.size(); ++i) {
-                time += (piles.at(i) / k);
-                if (piles.at(i) % k != 0) {
-                    ++time;
-                }
+            for (int i = piles.size() - 1; i >= 0; --i) {
+                time += ceil((double) piles.at(i) / (double) k);
 
                 if (time > h) {
                     start = k + 1;
@@ -29,6 +26,6 @@ public:
             }
         } 
 
-        return start + (end - start)/2;
+        return (start + end)/2;
     }
 };
