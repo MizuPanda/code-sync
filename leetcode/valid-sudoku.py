@@ -1,12 +1,7 @@
 class Solution {
 public:
-    bool isValidSudoku(vector<vector<char>>& board) {
-        
-        if (!isValidRows(board) || !isValidCols(board) || !isValidBoxes(board)) {
-            return false;
-        } 
-        
-        return true;
+    bool isValidSudoku(vector<vector<char>>& board) {    
+        return isValidRows(board) && isValidCols(board) && isValidBoxes(board);
     }
 
     bool isValidRows(vector<vector<char>>& board) {
