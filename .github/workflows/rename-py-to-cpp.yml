@@ -1,0 +1,53 @@
+name: Rename .py to .cpp
+
+on:
+  push:
+    branches: ["main", "master"]
+
+permissions:
+  contents: write
+
+jobs:
+  rename:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Rename .py files to .cpp
+        run: |
+          shopt -s globstar nullglob
+          renamed=0
+          for f in **/*.py; do
+            # Skip if the file doesn't exist (safety)
+            [ -f "$f" ] || continue
+
+            new="${f%.py}.cpp"
+
+            # If destination already exists, avoid overwriting
+            if [ -e "$new" ]; then
+              echo "Skip: $new already exists (from $f)"
+              continue
+            fi
+
+            mkdir -p "$(dirname "$new")"
+            git mv "$f" "$new"
+            renamed=1
+          done
+
+          if [ "$renamed" -eq 0 ]; then
+            echo "No .py files to rename."
+            exit 0
+          fi
+
+      - name: Commit & push changes (if any)
+        run: |
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: rename .py solutions to .cpp"
+          git push
