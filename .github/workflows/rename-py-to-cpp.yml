@@ -1,4 +1,4 @@
-name: Rename .py to .cpp
+name: Sync .py to .cpp
 
 on:
   push:
@@ -8,39 +8,41 @@ permissions:
   contents: write
 
 jobs:
-  rename:
+  sync:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Rename .py files to .cpp
+      - name: Convert/overwrite .cpp from .py and delete .py
         run: |
+          set -e
           shopt -s globstar nullglob
-          renamed=0
-          for f in **/*.py; do
-            # Skip if the file doesn't exist (safety)
-            [ -f "$f" ] || continue
 
+          changed=0
+
+          for f in **/*.py; do
+            [ -f "$f" ] || continue
             new="${f%.py}.cpp"
 
-            # If destination already exists, avoid overwriting
-            if [ -e "$new" ]; then
-              echo "Skip: $new already exists (from $f)"
-              continue
-            fi
-
+            # Ensure destination directory exists
             mkdir -p "$(dirname "$new")"
-            git mv "$f" "$new"
-            renamed=1
+
+            # Overwrite or create the .cpp with the .py contents
+            cp "$f" "$new"
+            git add "$new"
+
+            # Remove the .py file
+            git rm -f "$f" >/dev/null 2>&1 || rm -f "$f"
+            changed=1
           done
 
-          if [ "$renamed" -eq 0 ]; then
-            echo "No .py files to rename."
+          if [ "$changed" -eq 0 ]; then
+            echo "No .py files to convert."
             exit 0
           fi
 
-      - name: Commit & push changes (if any)
+      - name: Commit & push (if needed)
         run: |
           if git diff --cached --quiet; then
             echo "No changes to commit."
@@ -49,5 +51,5 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore: rename .py solutions to .cpp"
+          git commit -m "chore: sync LeetCode solutions to .cpp"
           git push
