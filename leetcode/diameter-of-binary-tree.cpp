@@ -12,16 +12,21 @@
 class Solution {
 public:
     int diameterOfBinaryTree(TreeNode* root) {
-        if (!root) return 0;
+        int res = 0;
 
-        int longestPath = maxDepth(root->left) + maxDepth(root->right);
+        dfs(root, res);
 
-        return max({longestPath, diameterOfBinaryTree(root->left), diameterOfBinaryTree(root->right)});
+        return res;
     }
 
-    int maxDepth(TreeNode* root) {
+    int dfs(TreeNode* root, int& res) {
         if (!root) return 0;
 
-        return max(maxDepth(root->left) + 1, maxDepth(root->right) + 1);
+        const int left = dfs(root->left, res);
+        const int right = dfs(root->right, res);
+
+        res = max(res, left + right);
+
+        return 1 + max(left, right);
     }
 };
