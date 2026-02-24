@@ -10,27 +10,27 @@
  * };
  */
 class Solution {
+private:
+    int res;
 public:
     int kthSmallest(TreeNode* root, int k) {
-        int answer;
-        int index = 0;
-        dfs(root, k, index, answer);
-        return answer;
+        dfs(root, k);
+        return res;
     }
 
-    void dfs(TreeNode* root, const int k, int& index, int& answer) {
-        if (!root || index == k) return ;
+    void dfs(TreeNode* root, int& k) {
+        if (!root || k == 0) return ;
 
-        dfs(root->left, k, index, answer);
+        dfs(root->left, k);
 
-        ++index;
+        --k;
 
-        if (index == k) {
-            answer = root->val;
+        if (k == 0) {
+            res = root->val;
             return ;
         }
 
-        dfs(root->right, k, index, answer);
+        dfs(root->right, k);
 
     }
 };
