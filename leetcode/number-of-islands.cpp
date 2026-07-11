@@ -9,15 +9,7 @@ public:
 
                 if (grid.at(m).at(n) == '1') {
                     ++res;
-                    grid.at(m).at(n) = '0';
-                    // Left
-                    searchIsland(grid, m - 1, n);
-                    // Right
-                    searchIsland(grid, m + 1, n);
-                    // Bottom
-                    searchIsland(grid, m, n + 1);
-                    // Top
-                    searchIsland(grid, m, n - 1);
+                    searchIsland(grid, m, n);
                 } 
             }
         }
