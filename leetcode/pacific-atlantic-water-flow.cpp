@@ -57,8 +57,7 @@ private:
 
 public:
     vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) {
-        vector<vector<int>> res;
-
+        
         PairMap pac;
         PairMap atl;
 
